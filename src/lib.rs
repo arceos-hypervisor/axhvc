@@ -19,21 +19,28 @@ numeric_enum! {
         HyperVisorDebug = 2,
         /// Only for debugging purposes.
         HDebug = HYPER_CALL_CODE_PRIVILEGED_MASK | 0,
+        /// Init ring 0 shim.
+        HInitShim = HYPER_CALL_CODE_PRIVILEGED_MASK | 1,
         /// Create a new instance, pass the raw binary/executable file by shared pages.
-        HCreateInstance = HYPER_CALL_CODE_PRIVILEGED_MASK | 1,
+        HCreateInstance = HYPER_CALL_CODE_PRIVILEGED_MASK |2,
+        /// Map instance memory to the host guest virtual address space.
+        /// This is called by the kernel driver when loading instance's ELF file.
+        /// called by host Linux, while the mapping will be synced to the instance.
+        /// This is used to map the host file system to the instance.
+        /// The file is mapped to the instance file memory region, and the instance can access it.
+        HLoadMMap = HYPER_CALL_CODE_PRIVILEGED_MASK | 3,
+        /// Setup a instance, this is called by the instance when it is created and loaded.
+        HSetupInstance = HYPER_CALL_CODE_PRIVILEGED_MASK | 4,
         /// Exit from a insance process.
-        HExitProcess = HYPER_CALL_CODE_PRIVILEGED_MASK | 2,
+        HExitProcess = HYPER_CALL_CODE_PRIVILEGED_MASK | 5,
         /// Exit from a instance, this is called by the instance when the last process in the instance exits.
-        HShutdownInstance = HYPER_CALL_CODE_PRIVILEGED_MASK | 3,
-        HMMAP = HYPER_CALL_CODE_PRIVILEGED_MASK | 4,
-        /// Clone current gaddrspace to a new one, return its EPTP list index.
-        HClone = HYPER_CALL_CODE_PRIVILEGED_MASK | 5,
-        // Init ring 0 shim.
-        HInitShim = HYPER_CALL_CODE_PRIVILEGED_MASK | 6,
+        HShutdownInstance = HYPER_CALL_CODE_PRIVILEGED_MASK | 6,
         /// Only for debugging purposes, console read.
         HRead = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x11,
         /// Only for debugging purposes, console write.
         HWrite = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x12,
+        /// Clone current gaddrspace to a new one, return its EPTP list index.
+        HClone = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x13,
     }
 }
 
@@ -52,9 +59,10 @@ impl core::fmt::Debug for HyperCallCode {
             HyperCallCode::HCreateInstance => write!(f, "HCreateInstance {:#x}", *self as u32),
             HyperCallCode::HExitProcess => write!(f, "HExitProcess {:#x}", *self as u32),
             HyperCallCode::HShutdownInstance => write!(f, "HShutdownInstance {:#x}", *self as u32),
-            HyperCallCode::HMMAP => write!(f, "HMMAP {:#x}", *self as u32),
+            HyperCallCode::HLoadMMap => write!(f, "HLoadMMap {:#x}", *self as u32),
             HyperCallCode::HClone => write!(f, "HClone {:#x}", *self as u32),
             HyperCallCode::HInitShim => write!(f, "HInitShim {:#x}", *self as u32),
+            HyperCallCode::HSetupInstance => write!(f, "HSetupInstance {:#x}", *self as u32),
         }?;
         write!(f, ")")
     }
