@@ -29,6 +29,9 @@ numeric_enum! {
         HExitProcess = HYPER_CALL_CODE_PRIVILEGED_MASK | 5,
         /// Exit from a instance, this is called by the instance when the last process in the instance exits.
         HShutdownInstance = HYPER_CALL_CODE_PRIVILEGED_MASK | 6,
+        /// Allocate a memory region for the instance.
+        /// This is called by the instance when it needs to extends its memory region.
+        HAllocMMRegion = HYPER_CALL_CODE_PRIVILEGED_MASK | 7,
         /// Only for debugging purposes, console read.
         HRead = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x11,
         /// Only for debugging purposes, console write.
@@ -56,6 +59,7 @@ impl core::fmt::Debug for HyperCallCode {
             HyperCallCode::HClone => write!(f, "HClone {:#x}", *self as u32),
             HyperCallCode::HInitShim => write!(f, "HInitShim {:#x}", *self as u32),
             HyperCallCode::HSetupInstance => write!(f, "HSetupInstance {:#x}", *self as u32),
+            HyperCallCode::HAllocMMRegion => write!(f, "HAllocMMRegion {:#x}", *self as u32),
         }?;
         write!(f, ")")
     }
