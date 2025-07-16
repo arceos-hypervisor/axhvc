@@ -32,6 +32,16 @@ numeric_enum! {
         /// Allocate a memory region for the instance.
         /// This is called by the instance when it needs to extends its memory region.
         HAllocMMRegion = HYPER_CALL_CODE_PRIVILEGED_MASK | 7,
+        /// Refer to `shmget` syscall <https://man7.org/linux/man-pages/man2/shmget.2.html>
+        /// this is used to get a shared memory region.
+        /// It may be used either to obtain the identifier of a previously created
+        /// shared memory segment (when shmflg is zero and key does not have
+        /// the value IPC_PRIVATE), or to create a new set.
+        /// It will return the base address and size of the shared memory region.
+        HIVCGet = HYPER_CALL_CODE_PRIVILEGED_MASK | 8,
+        /// Refer to `shmctl` syscall, <https://man7.org/linux/man-pages/man3/shmdt.3p.html>
+        /// this is used to unsubscribe from a shared memory region.
+        HIVCDt = HYPER_CALL_CODE_PRIVILEGED_MASK | 9,
         /// Only for debugging purposes, console read.
         HRead = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x11,
         /// Only for debugging purposes, console write.
@@ -60,6 +70,8 @@ impl core::fmt::Debug for HyperCallCode {
             HyperCallCode::HInitShim => write!(f, "HInitShim {:#x}", *self as u32),
             HyperCallCode::HSetupInstance => write!(f, "HSetupInstance {:#x}", *self as u32),
             HyperCallCode::HAllocMMRegion => write!(f, "HAllocMMRegion {:#x}", *self as u32),
+            HyperCallCode::HIVCGet => write!(f, "HIVCGet {:#x}", *self as u32),
+            HyperCallCode::HIVCDt => write!(f, "HIVCDt {:#x}", *self as u32),
         }?;
         write!(f, ")")
     }
