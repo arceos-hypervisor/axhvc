@@ -39,9 +39,12 @@ numeric_enum! {
         /// the value IPC_PRIVATE), or to create a new set.
         /// It will return the base address and size of the shared memory region.
         HIVCGet = HYPER_CALL_CODE_PRIVILEGED_MASK | 8,
-        /// Refer to `shmctl` syscall, <https://man7.org/linux/man-pages/man3/shmdt.3p.html>
+        /// Refer to `shmdt` syscall, <https://man7.org/linux/man-pages/man3/shmdt.3p.html>
         /// this is used to unsubscribe from a shared memory region.
         HIVCDt = HYPER_CALL_CODE_PRIVILEGED_MASK | 9,
+        /// Refer to `shmat` syscall, <https://man7.org/linux/man-pages/man2/shmat.2.html>
+        /// this is used to attach a shared memory region to the current instance.
+        HIVCSHMAt = HYPER_CALL_CODE_PRIVILEGED_MASK | 10,
         /// Only for debugging purposes, console read.
         HRead = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x11,
         /// Only for debugging purposes, console write.
@@ -72,6 +75,7 @@ impl core::fmt::Debug for HyperCallCode {
             HyperCallCode::HAllocMMRegion => write!(f, "HAllocMMRegion {:#x}", *self as u32),
             HyperCallCode::HIVCGet => write!(f, "HIVCGet {:#x}", *self as u32),
             HyperCallCode::HIVCDt => write!(f, "HIVCDt {:#x}", *self as u32),
+            HyperCallCode::HIVCSHMAt => write!(f, "HIVCSHMAt {:#x}", *self as u32),
         }?;
         write!(f, ")")
     }
