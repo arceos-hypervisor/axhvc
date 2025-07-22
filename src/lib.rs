@@ -45,6 +45,16 @@ numeric_enum! {
         /// Refer to `shmat` syscall, <https://man7.org/linux/man-pages/man2/shmat.2.html>
         /// this is used to attach a shared memory region to the current instance.
         HIVCSHMAt = HYPER_CALL_CODE_PRIVILEGED_MASK | 10,
+        /// Clear all guest memory areas,
+        /// I know this HVC seems strange, the thing is, we prepare a early-stage `eqloader`
+        /// in guest address space as a user-space executor, when the instance starts running,
+        /// the pre-loader `eqloader` is useless and should be cleared, because it will take up
+        /// the guest memory space and the mapping is not known by the `EqAddrSpace` in `ProcessInnerRegion`.
+        /// So we use this hypercall to notify the hypervisor that the loading is done and
+        /// the pre-loader should be cleared.
+        /// Generally, this HVC is triggered by `shim` in the first `brk` syscall.
+        HClearGuestAreas = HYPER_CALL_CODE_PRIVILEGED_MASK | 11,
+
         /// Only for debugging purposes, console read.
         HRead = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x11,
         /// Only for debugging purposes, console write.
@@ -76,6 +86,7 @@ impl core::fmt::Debug for HyperCallCode {
             HyperCallCode::HIVCGet => write!(f, "HIVCGet {:#x}", *self as u32),
             HyperCallCode::HIVCDt => write!(f, "HIVCDt {:#x}", *self as u32),
             HyperCallCode::HIVCSHMAt => write!(f, "HIVCSHMAt {:#x}", *self as u32),
+            HyperCallCode::HClearGuestAreas => write!(f, "HClearGuestAreas {:#x}", *self as u32),
         }?;
         write!(f, ")")
     }
