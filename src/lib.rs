@@ -59,8 +59,8 @@ numeric_enum! {
         HRead = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x11,
         /// Only for debugging purposes, console write.
         HWrite = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x12,
-        /// Fork current gaddrspace to a new one, return its EPTP list index.
-        HFork = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x13,
+        /// Duplicate current gaddrspace to a new one, return its EPTP list index.
+        HDupGas = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x13,
     }
 }
 
@@ -79,7 +79,7 @@ impl core::fmt::Debug for HyperCallCode {
             HyperCallCode::HCreateInstance => write!(f, "HCreateInstance {:#x}", *self as u32),
             HyperCallCode::HExitProcess => write!(f, "HExitProcess {:#x}", *self as u32),
             HyperCallCode::HShutdownInstance => write!(f, "HShutdownInstance {:#x}", *self as u32),
-            HyperCallCode::HFork => write!(f, "HFork {:#x}", *self as u32),
+            HyperCallCode::HDupGas => write!(f, "HDupGas {:#x}", *self as u32),
             HyperCallCode::HInitShim => write!(f, "HInitShim {:#x}", *self as u32),
             HyperCallCode::HSetupInstance => write!(f, "HSetupInstance {:#x}", *self as u32),
             HyperCallCode::HAllocMMRegion => write!(f, "HAllocMMRegion {:#x}", *self as u32),
