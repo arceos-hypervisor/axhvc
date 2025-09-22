@@ -1,5 +1,9 @@
 #![no_std]
 
+mod vmm;
+
+pub use vmm::*;
+
 use bit_field::BitField;
 use numeric_enum_macro::numeric_enum;
 
@@ -17,6 +21,13 @@ numeric_enum! {
         HyperVisorPrepareDisable = 1,
         /// Only for debugging purposes.
         HyperVisorDebug = 2,
+        /// Create a new VM.
+        CreateVM = 0x101,
+        /// Boot a VM.
+        BootVM = 0x102,
+        /// Destroy a VM.
+        DestroyVM = 0x103,
+
         /// Only for debugging purposes.
         HDebug = HYPER_CALL_CODE_PRIVILEGED_MASK | 0,
         /// Init ring 0 shim.
@@ -75,6 +86,9 @@ impl core::fmt::Debug for HyperCallCode {
                 write!(f, "HyperVisorPrepareDisable {:#x}", *self as u32)
             }
             HyperCallCode::HyperVisorDebug => write!(f, "HyperVisorDebug {:#x}", *self as u32),
+            HyperCallCode::CreateVM => write!(f, "CreateVM {:#x}", *self as u32),
+            HyperCallCode::BootVM => write!(f, "BootVM {:#x}", *self as u32),
+            HyperCallCode::DestroyVM => write!(f, "DestroyVM {:#x}", *self as u32),
             HyperCallCode::HDebug => write!(f, "HDebug {:#x}", *self as u32),
             HyperCallCode::HRead => write!(f, "HRead {:#x}", *self as u32),
             HyperCallCode::HWrite => write!(f, "HWrite {:#x}", *self as u32),
