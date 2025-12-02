@@ -63,6 +63,10 @@ numeric_enum! {
         HDupGas = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x13,
         /// Just a benchmark hypercall for VM call overhead measurement.
         HBenchVMCall = HYPER_CALL_CODE_PRIVILEGED_MASK | 0xff,
+        /// Just a benchmark hypercall for EPT mmap overhead measurement.
+        HBenchEPTMmap = HYPER_CALL_CODE_PRIVILEGED_MASK | 0xfe,
+        /// Just a benchmark hypercall for EPT munmap overhead measurement.
+        HBenchEPTMUnmap = HYPER_CALL_CODE_PRIVILEGED_MASK | 0xfd,
     }
 }
 
@@ -90,6 +94,8 @@ impl core::fmt::Debug for HyperCallCode {
             HyperCallCode::HIVCSHMAt => write!(f, "HIVCSHMAt {:#x}", *self as u32),
             HyperCallCode::HClearGuestAreas => write!(f, "HClearGuestAreas {:#x}", *self as u32),
             HyperCallCode::HBenchVMCall => write!(f, "HBenchVMCall {:#x}", *self as u32),
+            HyperCallCode::HBenchEPTMmap => write!(f, "HBenchEPTMmap {:#x}", *self as u32),
+            HyperCallCode::HBenchEPTMUnmap => write!(f, "HBenchEPTMUnmap {:#x}", *self as u32),
         }?;
         write!(f, ")")
     }
