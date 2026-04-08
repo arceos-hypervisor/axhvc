@@ -55,12 +55,20 @@ numeric_enum! {
         /// Generally, this HVC is triggered by `shim` in the first `brk` syscall.
         HClearGuestAreas = HYPER_CALL_CODE_PRIVILEGED_MASK | 11,
 
+        HMMapSync = HYPER_CALL_CODE_PRIVILEGED_MASK | 12,
+
         /// Only for debugging purposes, console read.
         HRead = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x11,
         /// Only for debugging purposes, console write.
         HWrite = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x12,
         /// Duplicate current gaddrspace to a new one, return its EPTP list index.
         HDupGas = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x13,
+        /// Switch the current process between VM-Exit and #VE EPT fault handling.
+        HSetEptFaultMode = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x14,
+        /// Force a single-context EPT synchronization for the current process.
+        HEptSync = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x15,
+        /// Forward a shim-observed #VE fault to the hypervisor baseline resolver.
+        HHandleVeFault = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x16,
         /// Just a benchmark hypercall for VM call overhead measurement.
         HBenchVMCall = HYPER_CALL_CODE_PRIVILEGED_MASK | 0xff,
         /// Just a benchmark hypercall for EPT mmap overhead measurement.
@@ -86,6 +94,10 @@ impl core::fmt::Debug for HyperCallCode {
             HyperCallCode::HExitProcess => write!(f, "HExitProcess {:#x}", *self as u32),
             HyperCallCode::HShutdownInstance => write!(f, "HShutdownInstance {:#x}", *self as u32),
             HyperCallCode::HDupGas => write!(f, "HDupGas {:#x}", *self as u32),
+            HyperCallCode::HMMapSync => write!(f, "HMMapSync {:#x}", *self as u32),
+            HyperCallCode::HSetEptFaultMode => write!(f, "HSetEptFaultMode {:#x}", *self as u32),
+            HyperCallCode::HEptSync => write!(f, "HEptSync {:#x}", *self as u32),
+            HyperCallCode::HHandleVeFault => write!(f, "HHandleVeFault {:#x}", *self as u32),
             HyperCallCode::HInitShim => write!(f, "HInitShim {:#x}", *self as u32),
             HyperCallCode::HSetupInstance => write!(f, "HSetupInstance {:#x}", *self as u32),
             HyperCallCode::HAllocMMRegion => write!(f, "HAllocMMRegion {:#x}", *self as u32),
