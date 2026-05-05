@@ -58,6 +58,9 @@ numeric_enum! {
         HSetEptFaultMode = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x14,
         /// Force a single-context EPT synchronization for the current process.
         HEptSync = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x15,
+        /// Tear down the current process private user mappings without
+        /// removing the process object from the instance process table.
+        HExitCurrentProcess = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x16,
         /// Just a benchmark hypercall for VM call overhead measurement.
         HBenchVMCall = HYPER_CALL_CODE_PRIVILEGED_MASK | 0xff,
         /// Just a benchmark hypercall for EPT mmap overhead measurement.
@@ -86,6 +89,9 @@ impl core::fmt::Debug for HyperCallCode {
             HyperCallCode::HMMapSync => write!(f, "HMMapSync {:#x}", *self as u32),
             HyperCallCode::HSetEptFaultMode => write!(f, "HSetEptFaultMode {:#x}", *self as u32),
             HyperCallCode::HEptSync => write!(f, "HEptSync {:#x}", *self as u32),
+            HyperCallCode::HExitCurrentProcess => {
+                write!(f, "HExitCurrentProcess {:#x}", *self as u32)
+            }
             HyperCallCode::HInitShim => write!(f, "HInitShim {:#x}", *self as u32),
             HyperCallCode::HSetupInstance => write!(f, "HSetupInstance {:#x}", *self as u32),
             HyperCallCode::HAllocMMRegion => write!(f, "HAllocMMRegion {:#x}", *self as u32),
